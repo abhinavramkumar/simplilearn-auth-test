@@ -1,7 +1,7 @@
 import { navigate } from '@reach/router';
 import { useAuthDispatch } from 'components/AuthContext';
 import React, { useState } from 'react';
-import { toast } from 'react-toastify'
+import { toast } from 'react-toastify';
 
 
 const loginUser = async (body) => {
@@ -31,7 +31,8 @@ const Login = () => {
     password: ""
   });
   const dispatch = useAuthDispatch();
-  const [error, setError] = useState('');
+  const [usernameError, setUsernameError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
 
   const onChangeTextInput = e => {
     const { name, value } = e.currentTarget;
@@ -39,11 +40,18 @@ const Login = () => {
       ...prevState,
       [name]: value
     }));
+    if (name === "username") {
+      setUsernameError('');
+    } else {
+      setPasswordError('');
+    }
   };
 
   const onClickLogin = async e => {
     e.preventDefault();
     if (formState.username && formState.password) {
+      setUsernameError('');
+      setPasswordError('');
       const body = {
         ...formState
       };
@@ -57,7 +65,12 @@ const Login = () => {
         toast.error(response.message, {});
       }
     } else {
-      console.log("fields are empty");
+      if (!formState.username) {
+        setUsernameError('Field cannot be empty');
+      }
+      if (!formState.password) {
+        setPasswordError('Field cannot be empty');
+      }
     }
   };
 
@@ -76,10 +89,11 @@ const Login = () => {
           <form>
             <fieldset className="mb-4">
               <label className="text-xs font-semibold" htmlFor="username">Username<input className="block w-full h-10 px-2 text-sm my-1 border border-solid border-gray-400 rounded-lg" type="text" name="username" value={formState.username} onChange={onChangeTextInput} /></label>
-              <p className={`text-red-700 text-xs ${error ? `block` : `hidden`}`} >{error}</p>
+              <p className={`text-red-700 text-xs ${usernameError ? `block` : `hidden`}`} >{usernameError}</p>
             </fieldset>
             <fieldset className="mb-6">
               <label className="text-xs font-semibold" htmlFor="password">Password<input className="block w-full h-10 px-2 text-sm my-1 border border-solid border-gray-400 rounded-lg" type="password" name="password" value={formState.password} onChange={onChangeTextInput} autoComplete="on" /></label>
+              <p className={`text-red-700 text-xs ${passwordError ? `block` : `hidden`}`} >{passwordError}</p>
             </fieldset>
             <fieldset>
               <button className="block w-full h-10 rounded-lg text-center text-sm uppercase font-semibold text-white bg-purple-700 tracking-wide mb-4" type="button" onClick={onClickLogin}>Login</button>

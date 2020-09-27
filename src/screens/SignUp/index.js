@@ -26,6 +26,7 @@ const userSignUp = async (body) => {
 
 const SignUp = () => {
   const [userId, setUserId] = useState(null);
+  const [isShowLoginButton, setIsShowLoginButton] = useState(false);
   const [formState, setFormState] = useState({
     name: "",
     password: "",
@@ -41,10 +42,28 @@ const SignUp = () => {
 
   const onChangeTextInput = e => {
     const { name, value } = e.currentTarget;
-    setFormState(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
+    // debugger;
+    if (name === "password" || name === "confirmPassword") {
+      setFormState(prevState => ({
+        ...prevState,
+        [name]: value
+      }));
+      if (value && value.length >= 8) {
+        setFormErrorState(prevState => ({
+          ...prevState,
+          [name]: ""
+        }));
+      } else {
+        setFormErrorState(prevState => ({
+          ...prevState,
+          [name]: "Password should have minimum 8 characters"
+        }));
+      }
+    } else
+      setFormState(prevState => ({
+        ...prevState,
+        [name]: value
+      }));
   };
 
   const onBlurTextInput = e => {
@@ -59,7 +78,7 @@ const SignUp = () => {
       if (value !== formState.password) {
         setFormErrorState(prevState => ({
           ...prevState,
-          confirmPassword: "Passwords dont match"
+          confirmPassword: "Password dont match"
         }));
       }
     } else {
@@ -68,6 +87,12 @@ const SignUp = () => {
         [name]: ""
       }));
     }
+
+    const showLoginButton = formErrorState.confirmPassword.length > 0 && formErrorState.password.length > 0 && formErrorState.email.length > 0 && formErrorState.name.length > 0;
+
+    console.log(showLoginButton);
+
+    setIsShowLoginButton(showLoginButton);
   };
 
   const onSubmitForm = async e => {
@@ -85,21 +110,15 @@ const SignUp = () => {
         console.log(response);
         if (response.status === "success") {
           setUserId(response.userId);
-          toast.success("User created successfully", {
-
-          });
+          toast.success("User created successfully", {});
+        } else {
+          toast.error(response.message, {});
         }
       }
     }
-
-
-    // check if no fields are empty
-    // check if email is valid
-    // check if passwords path
-    // if valid then submit form
-    // else display error with approp mssg
-    // on submit show userename select page
   };
+
+  console.log({ formErrorState });
 
   return (
     <div>
@@ -131,7 +150,7 @@ const SignUp = () => {
               </fieldset>
 
               <fieldset>
-                <button className="block w-full h-10 rounded-lg text-center text-sm uppercase font-semibold text-white bg-purple-700 tracking-wide" type="submit">Login</button>
+                <button className={`block w-full h-10 rounded-lg text-center text-sm uppercase font-semibold text-white  tracking-wide bg-purple-700 ${isShowLoginButton ? '' : 'cursor-not-allowed '}`} type="submit">Login</button>
               </fieldset>
             </form>
           ) : (

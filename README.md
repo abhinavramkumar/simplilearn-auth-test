@@ -1,4 +1,4 @@
-# instructions
+# Instructions
 
 Database name is simplilearn_test
 Table name is Users

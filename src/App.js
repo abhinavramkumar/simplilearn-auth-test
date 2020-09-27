@@ -8,6 +8,7 @@ import React, { useEffect, useState } from 'react';
 import { Slide, ToastContainer } from 'react-toastify';
 import Dashboard from 'screens/Dashboard';
 import Login from 'screens/Login';
+import PageNotFound from 'screens/PageNotFound';
 import SignUp from 'screens/SignUp';
 
 const checkAuthStatus = async () => {
@@ -51,6 +52,7 @@ const App = () => {
         <PublicRoute path="/login" component={Login} />
         <PrivateRoute path="/dashboard" component={Dashboard} />
         <PrivateRoute path="/" component={Dashboard} />
+        <PageNotFound default />
       </Router>)}
 
       <ToastContainer autoClose={3500} hideProgressBar

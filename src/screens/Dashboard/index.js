@@ -75,8 +75,8 @@ const Dashboard = () => {
       )}
 
 
-      <div className="max-w-md mx-auto">
-        <button className="block w-full h-10 rounded-lg text-center text-sm uppercase font-semibold text-white bg-green-500 tracking-wide" type="button" onClick={onClickLogout}>Logout</button>
+      <div className="max-w-xs mx-auto">
+        <button className="block w-full h-10 rounded-lg text-center text-sm uppercase font-semibold text-white bg-gray-700 tracking-wide" type="button" onClick={onClickLogout}>Logout</button>
       </div>
     </div>
   );
